@@ -1,0 +1,3 @@
+D:/Programming/C++/InfixCalc/cmake-build-debug/CMakeFiles/InfixCalc.dir
+D:/Programming/C++/InfixCalc/cmake-build-debug/CMakeFiles/edit_cache.dir
+D:/Programming/C++/InfixCalc/cmake-build-debug/CMakeFiles/rebuild_cache.dir
