@@ -17,23 +17,19 @@ std::vector<Object> ShuntYard::to_infix() {
         switch (tokens[position].get_type()) {
             case INT:
                 output.push(Object(INT, std::stoi(tokens[position].get_literal()), tokens[position].get_literal()));
-                position++;
                 break;
-            case OP:
-                if (tokens[position].get_literal() == "+" || tokens[position].get_literal() == "-") {
-                    while (operators.size() != 0 &&
-                           (operators.top().literal == "*" || operators.top().literal == "/")) {
-                        Object cur_object = operators.top();
-                        output.push(cur_object);
-                        operators.pop();
-                    }
+            case ADD:
+            case SUB:
+                while (operators.size() != 0 &&
+                        (operators.top().literal == "*" || operators.top().literal == "/")) {
+                    Object cur_object = operators.top();
+                    output.push(cur_object);
+                    operators.pop();
                 }
-                operators.push(Object(OP, tokens[position].get_literal(), tokens[position].get_literal()));
-                position++;
-                break;
+            case MULT:
+            case DIV:
             case LPAREN:
-                operators.push(Object(OP, tokens[position].get_literal(), tokens[position].get_literal()));
-                position++;
+                operators.push(Object(tokens[position].get_type(), tokens[position].get_literal(), tokens[position].get_literal()));
                 break;
             case RPAREN:
                 if(operators.size() != 0) {
@@ -43,9 +39,10 @@ std::vector<Object> ShuntYard::to_infix() {
                     }
                     operators.pop();
                 }
-                position++;
                 break;
         }
+
+        position++;
     }
 
     while (operators.size() != 0) {

@@ -10,27 +10,42 @@ Evaluator::Evaluator(std::vector<Object> objects) {
 }
 
 int Evaluator::get_result() {
+    int num1, num2;
     for(Object obj: objects){
         switch (obj.token_type) {
             case INT:
                 output.push(obj);
                 break;
-            case OP:
-                int num2 = output.top().value;
+            case ADD:
+                num2 = output.top().value;
                 output.pop();
-                int num1 = output.top().value;
+                num1 = output.top().value;
                 output.pop();
+                output.push(Object(INT, num1+num2, std::to_string(num1+num2)));
+                break;
 
-                if(!obj.literal.compare("+")){
-                    output.push(Object(INT, num1+num2, std::to_string(num1+num2)));
-                }else if(!obj.literal.compare("-")){
-                    output.push(Object(INT, num1-num2, std::to_string(num1-num2)));
-                }else if(!obj.literal.compare("*")){
-                    output.push(Object(INT, num1*num2, std::to_string(num1*num2)));;
-                }else if(!obj.literal.compare("/")){
-                    output.push(Object(INT, num1/num2, std::to_string(num1/num2)));
-                }
+            case SUB:
+                num2 = output.top().value;
+                output.pop();
+                num1 = output.top().value;
+                output.pop();
+                output.push(Object(INT, num1-num2, std::to_string(num1+num2)));
+                break;
 
+            case MULT:
+                num2 = output.top().value;
+                output.pop();
+                num1 = output.top().value;
+                output.pop();
+                output.push(Object(INT, num1*num2, std::to_string(num1+num2)));
+                break;
+
+            case DIV:
+                num2 = output.top().value;
+                output.pop();
+                num1 = output.top().value;
+                output.pop();
+                output.push(Object(INT, num1/num2, std::to_string(num1+num2)));
                 break;
         }
     }

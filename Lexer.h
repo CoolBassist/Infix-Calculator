@@ -10,9 +10,14 @@
 #include "Token.h"
 
 class Lexer {
+private:
     int position;
     std::string input;
     void skip_whitespace();
+    std::vector<Token> parse_expression();
+    std::vector<Token> parse_infix_expression();
+    std::vector<Token> parse_prefix_expression();
+    std::vector<Token> cleanup_tokens(std::vector<Token>);
     std::string read_integer_literal();
 public:
     Lexer(std::string);
