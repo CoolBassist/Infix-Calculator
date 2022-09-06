@@ -1,5 +1,5 @@
 //
-// Created by errey on 05/09/2022.
+// Created by CoolBassist on 05/09/2022.
 //
 
 #include <iostream>
@@ -37,7 +37,11 @@ std::vector<Token> Lexer::get_tokens() {
                 position++;
                 break;
             case '-':
-                tokens.push_back(Token(SUB, std::string(1, input[position])));
+                if((tokens.size() == 0 || tokens.back().get_type() != RPAREN) && std::isdigit(input[position+1])){
+                    tokens.push_back(Token(NEG, std::string(1, input[position])));
+                }else {
+                    tokens.push_back(Token(SUB, std::string(1, input[position])));
+                }
                 position++;
                 break;
             case '*':
@@ -46,6 +50,10 @@ std::vector<Token> Lexer::get_tokens() {
                 break;
             case '/':
                 tokens.push_back(Token(DIV, std::string(1, input[position])));
+                position++;
+                break;
+            case '^':
+                tokens.push_back(Token(EXP, std::string(1, input[position])));
                 position++;
                 break;
             case '(':
@@ -66,6 +74,20 @@ std::vector<Token> Lexer::get_tokens() {
                         tokens.clear();
                         return tokens;
                     }
+                }else if(std::isalpha(input[position])){
+                    std::string result = read_identifier();
+
+                    if(!result.compare("sin")){
+                        tokens.push_back(Token(SIN, result));
+                    }else if(!result.compare("cos")){
+                        tokens.push_back(Token(COS, result));
+                    }else if(!result.compare("tan")){
+                        tokens.push_back(Token(TAN, result));
+                    }else{
+                        std::cout << "Unexpected token " << input[position] << "\n";
+                        tokens.clear();
+                        return tokens;
+                    }
                 }else{
                     std::cout << "Unexpected token " << input[position] << "\n";
                     tokens.clear();
@@ -74,24 +96,14 @@ std::vector<Token> Lexer::get_tokens() {
         }
     }
 
-    return cleanup_tokens(tokens);
+    return tokens;
 }
 
-std::vector<Token> Lexer::cleanup_tokens(std::vector<Token> tokens) {
-    std::vector<Token> new_tokens;
-
-    for(int i = 0; i < tokens.size(); i++){
-        if(tokens[i].get_type() != SUB){
-            new_tokens.push_back(tokens[i]);
-        }else{
-            if(i == 0 || (tokens[i-1].get_type() != RPAREN && tokens[i+1].get_type() == INT)){
-                new_tokens.push_back(Token(INT, "-" + tokens[i+1].get_literal()));
-                i++;
-            }else{
-                new_tokens.push_back(tokens[i]);
-            }
-        }
+std::string Lexer::read_identifier() {
+    std::string identifier = "";
+    while(std::isalpha(input[position])){
+        identifier += input[position];
+        position++;
     }
-
-    return new_tokens;
+    return identifier;
 }

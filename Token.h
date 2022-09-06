@@ -1,5 +1,5 @@
 //
-// Created by errey on 05/09/2022.
+// Created by CoolBassist on 05/09/2022.
 //
 
 #ifndef INFIXCALC_TOKEN_H
@@ -8,7 +8,7 @@
 
 #include <string>
 
-enum Type {INT, ADD, SUB, MULT, DIV, LPAREN, RPAREN};
+enum Type {INT, ADD, SUB, MULT, DIV, EXP, LPAREN, RPAREN, NEG, SIN, COS, TAN};
 
 class Token {
 private:
@@ -19,6 +19,5 @@ public:
     Type get_type();
     std::string get_literal();
 };
-
 
 #endif //INFIXCALC_TOKEN_H

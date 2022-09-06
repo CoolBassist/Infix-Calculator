@@ -1,5 +1,5 @@
 //
-// Created by errey on 05/09/2022.
+// Created by CoolBassist on 05/09/2022.
 //
 
 #include "Object.h"

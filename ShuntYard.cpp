@@ -1,5 +1,5 @@
 //
-// Created by errey on 05/09/2022.
+// Created by CoolBassist on 05/09/2022.
 //
 
 #include <iostream>
@@ -15,6 +15,10 @@ std::vector<Object> ShuntYard::to_infix() {
 
     while (position < tokens.size()) {
         switch (tokens[position].get_type()) {
+            case NEG:
+                position++;
+                output.push(Object(INT, 0-std::stoi(tokens[position].get_literal()), "-" + tokens[position].get_literal()));
+                break;
             case INT:
                 output.push(Object(INT, std::stoi(tokens[position].get_literal()), tokens[position].get_literal()));
                 break;
@@ -28,6 +32,12 @@ std::vector<Object> ShuntYard::to_infix() {
                 }
             case MULT:
             case DIV:
+                while(operators.size() != 0 && (operators.top().literal == "^" || operators.top().literal == "sin" || operators.top().literal == "cos" || operators.top().literal == "tan")){
+                    Object cur_object = operators.top();
+                    output.push(cur_object);
+                    operators.pop();
+                }
+            case EXP:
             case LPAREN:
                 operators.push(Object(tokens[position].get_type(), tokens[position].get_literal(), tokens[position].get_literal()));
                 break;
@@ -39,6 +49,11 @@ std::vector<Object> ShuntYard::to_infix() {
                     }
                     operators.pop();
                 }
+                break;
+            case SIN:
+            case COS:
+            case TAN:
+                operators.push(Object(tokens[position].get_type(), tokens[position].get_literal(), tokens[position].get_literal()));
                 break;
         }
 
