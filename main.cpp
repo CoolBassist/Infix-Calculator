@@ -60,26 +60,10 @@ int main() {
 
     std::cout << "Tokens: ";
 
-    for(Token t: tokens){
-        std::cout << "{";
-        switch (t.get_type()){
-            case ADD:
-                std::cout << "ADD"; break;
-            case SUB:
-                std::cout << "SUB"; break;
-            case DIV:
-                std::cout << "DIV"; break;
-            case MULT:
-                std::cout << "MUL"; break;
-            case LPAREN:
-                std::cout << "LPA"; break;
-            case RPAREN:
-                std::cout << "RPA"; break;
-            case INT:
-                std::cout << "INT"; break;
-        }
+    std::string types[] {"INT", "ADD", "SUB", "MUL", "DIV", "LPA", "RPA"};
 
-        std::cout << ", '" << t.get_literal() << "'}, ";
+    for(Token t: tokens){
+        std::cout << "{" << types[t.get_type()] << ", '" << t.get_literal() << "'}, ";
     }
 
     std::cout << "\n\n";
