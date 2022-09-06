@@ -1,8 +1,6 @@
 //
 // Created by CoolBassist on 05/09/2022.
 //
-
-#include <iostream>
 #include "Evaluator.h"
 #include <cmath>
 
