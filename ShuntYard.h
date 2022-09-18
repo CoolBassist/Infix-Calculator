@@ -8,18 +8,19 @@
 
 #include <stack>
 #include <queue>
+#include <variant>
 #include "Token.h"
 #include "Object.h"
 
 class ShuntYard {
 private:
     std::vector<Token> tokens;
-    std::stack<Object> operators;
-    std::queue<Object> output;
+    std::stack<OpObject> operators;
+    std::queue<std::variant<IntObject, OpObject>> output;
     int position;
 public:
     ShuntYard(std::vector<Token>);
-    std::vector<Object> to_infix();
+    std::vector<std::variant<IntObject, OpObject>> to_infix();
 };
 
 
