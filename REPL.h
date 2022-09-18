@@ -16,7 +16,7 @@ private:
     Lexer *l;
     ShuntYard *sy;
     Evaluator *e;
-    std::string prefix = ">>>";
+    std::string prefix = ">>> ";
     void test();
 public:
     void start();

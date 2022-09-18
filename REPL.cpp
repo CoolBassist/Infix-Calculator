@@ -7,16 +7,16 @@
 #include "REPL.h"
 
 void REPL::start() {
-    while(true) {
+    while (true) {
         std::cout << prefix;
         std::string input;
-        std::getline(std::cin ,input);
+        std::getline(std::cin, input);
         if (!input.compare("exit")) {
             return;
-        }else if(!input.compare("debug")){
+        } else if (!input.compare("debug")) {
             debug = !debug;
             continue;
-        }else if(!input.compare("test")){
+        } else if (!input.compare("test")) {
             test();
             continue;
         }
@@ -30,11 +30,11 @@ void REPL::start() {
             continue;
         }
 
-        if(debug){
+        if (debug) {
             std::cout << "Number of tokens: " << tokens.size() << "\n";
             std::cout << "Tokens: ";
-            std::string types[] {"INT", "ADD", "SUB", "MUL", "DIV", "EXP", "LPA", "RPA", "NEG", "SIN", "COS", "TAN"};
-            for(Token t: tokens){
+            std::string types[]{"INT", "ADD", "SUB", "MUL", "DIV", "EXP", "LPA", "RPA", "NEG", "SIN", "COS", "TAN"};
+            for (Token t: tokens) {
                 std::cout << "{" << types[t.get_type()] << ", '" << t.get_literal() << "'}, ";
             }
             std::cout << "\n";
@@ -42,7 +42,7 @@ void REPL::start() {
 
         sy = new ShuntYard(tokens);
 
-        std::vector<Object> objects;
+        std::vector<std::variant<IntObject, OpObject>> objects;
 
         objects = sy->to_infix();
 
@@ -51,10 +51,14 @@ void REPL::start() {
             continue;
         }
 
-        if(debug){
+        if (debug) {
             std::cout << "Objects: ";
-            for(Object obj: objects){
-                std::cout << "{" << obj.literal << "}, ";
+            for (std::variant<IntObject, OpObject> obj: objects) {
+                if(std::holds_alternative<IntObject>(obj)) {
+                    std::cout << "{" << std::get<IntObject>(obj).get_literal() << "}, ";
+                }else{
+                    std::cout << "{" << std::get<OpObject>(obj).get_literal() << "}, ";
+                }
             }
             std::cout << "\n";
         }
@@ -71,31 +75,45 @@ void REPL::start() {
     }
 }
 
-void REPL::test(){
-    std::map<std::string, int> tests {{"3-(2+1)", 0}, {"2+2", 4}, {"((((((1+1)+1)+1)+1)+1)+1)", 7}, {"1*5", 5}, {"2*7+2", 16}, {"(3+4)*(4/2)", 14}, {"2 * 54 + 2 * (7 + 5) + 4/2", 134}};
+void REPL::test() {
+    std::map<std::string, int> tests{{"3-(2+1)",                    0},
+                                     {"7-4",                        3},
+                                     {"4/2",                        2},
+                                     {"2+2",                        4},
+                                     {"-3--2",                     -1},
+                                     {"((((((1+1)+1)+1)+1)+1)+1)",  7},
+                                     {"1*5",                        5},
+                                     {"2*7+2",                      16},
+                                     {"(3+4)*(4/2)",                14},
+                                     {"2 * 54 + 2 * (7 + 5) + 4/2", 134}};
     int i = 1;
-    for(auto test: tests){
+    for (auto test: tests) {
         Lexer l(test.first);
         std::vector<Token> tokens = l.get_tokens();
         ShuntYard sy(tokens);
-        std::vector<Object> objects = sy.to_infix();
+        std::vector<std::variant<IntObject, OpObject>> objects = sy.to_infix();
         Evaluator e(objects);
         int result = e.get_result();
-        if(result != test.second){
+        if (result != test.second) {
             std::cout << "test #" << i << " failed. Got " << result << " expected " << test.second << "\n";
             std::cout << "Tokens: ";
 
-            for(Token t: tokens){
+            for (Token t: tokens) {
                 std::cout << "{" << t.get_type() << " '" << t.get_literal() << "'}, ";
             }
 
             std::cout << "Objects: ";
 
-            for(Object obj: objects){
-                std::cout << "{" << obj.literal << "}, ";
+            for (std::variant<IntObject, OpObject> obj: objects) {
+                if(std::holds_alternative<IntObject>(obj)) {
+                    std::cout << "{" << std::get<IntObject>(obj).get_literal() << "}, ";
+                }else{
+                    std::cout << "{" << std::get<OpObject>(obj).get_literal() << "}, ";
+                }
             }
+            std::cout << "\n";
 
-        }else{
+        } else {
             std::cout << "test #" << i << " passed.\n";
         }
         i++;
