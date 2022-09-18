@@ -7,7 +7,14 @@
 #include "Token.h"
 
 Lexer::Lexer(std::string input) {
-    this->input = input;
+    std::string inp = "";
+    for(char c: input){
+        if(c == ' ' || c == '\t' || c == '\n' || c == '\r'){
+            continue;
+        }
+        inp += c;
+    }
+    this->input = inp;
     this->position = 0;
 }
 
@@ -17,27 +24,21 @@ std::string Lexer::read_integer_literal() {
         integer_literal += input[position];
         position++;
     }
-    return integer_literal;
-}
 
-void Lexer::skip_whitespace() {
-    while(input[position] == ' ' || input[position] == '\t' || input[position] == '\n' || input[position] == '\r'){
-        position++;
-    }
+    return integer_literal;
 }
 
 std::vector<Token> Lexer::get_tokens() {
     std::vector<Token> tokens;
 
     while(position < input.size()){
-        skip_whitespace();
         switch (input[position]) {
             case '+':
                 tokens.push_back(Token(ADD, std::string(1, input[position])));
                 position++;
                 break;
             case '-':
-                if((tokens.size() == 0 || tokens.back().get_type() != RPAREN) && std::isdigit(input[position+1])){
+                if(tokens.size() == 0 || (tokens.back().get_type() != RPAREN && !std::isdigit(input[position-1]))){
                     tokens.push_back(Token(NEG, std::string(1, input[position])));
                 }else {
                     tokens.push_back(Token(SUB, std::string(1, input[position])));
