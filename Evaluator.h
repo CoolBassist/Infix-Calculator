@@ -8,14 +8,15 @@
 
 #include <vector>
 #include <stack>
+#include <variant>
 #include "Object.h"
 
 class Evaluator {
 private:
-    std::vector<Object> objects;
-    std::stack<Object> output;
+    std::vector<std::variant<IntObject, OpObject>> objects;
+    std::stack<IntObject> output;
 public:
-    Evaluator(std::vector<Object>);
+    Evaluator(std::vector<std::variant<IntObject, OpObject>>);
     int get_result();
 };
 
