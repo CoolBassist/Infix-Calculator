@@ -9,16 +9,24 @@
 #include <string>
 #include "Token.h"
 
-class Object {
-public:
-    Type token_type;
+class IntObject {
+private:
     int value;
-    std::string op;
     std::string literal;
-
-    Object(Type, int, std::string);
-    Object(Type, std::string, std::string);
+public:
+    IntObject(int, std::string);
+    int get_value();
+    std::string get_literal();
 };
 
+class OpObject {
+private:
+    Type type;
+    std::string literal;
+public:
+    OpObject(Type, std::string);
+    Type get_type();
+    std::string get_literal();
+};
 
 #endif //INFIXCALC_OBJECT_H

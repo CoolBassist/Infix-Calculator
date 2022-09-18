@@ -4,14 +4,28 @@
 
 #include "Object.h"
 
-Object::Object(Type token_type, int value, std::string literal) {
-    this->token_type = token_type;
+IntObject::IntObject(int value, std::string literal) {
     this->value = value;
     this->literal = literal;
 }
 
-Object::Object(Type token_type, std::string op, std::string literal) {
-    this->token_type = token_type;
-    this->op = op;
+int IntObject::get_value() {
+    return value;
+}
+
+std::string IntObject::get_literal() {
+    return literal;
+}
+
+OpObject::OpObject(Type type, std::string literal) {
+    this->type = type;
     this->literal = literal;
+}
+
+Type OpObject::get_type() {
+    return type;
+}
+
+std::string OpObject::get_literal() {
+    return literal;
 }
