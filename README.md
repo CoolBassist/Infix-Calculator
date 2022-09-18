@@ -8,7 +8,7 @@ This calculator uses a REPL approach where the user inputs a single line express
 3. Evaluation
 
 ## Lexing
-The calculator uses a lexer to turn the input into a vector of tokens. This is where a string of digits are converted into the full number, where a `-` symbol is evaluated to be either a unary or binary operator etc. Any unknown operators or symbols holt the lexer and returns an empty vector of tokens. Upon successful lexing the operator will return a vector of tokens.
+The calculator uses a lexer to turn the input into a vector of tokens. This is where a string of digits are converted into the full number, where a `-` symbol is evaluated to be either a unary or binary operator etc. Any unknown operators or symbols holt the lexer and returns an empty vector of tokens. Upon successful lexing the lexer will return a vector of tokens.
 
 ## Shuntyard
 The shuntyard algorithm is an algorithm designed by Dijkstra to convert an infix expression, which can be difficult to evaluate, into postfix notation, which is fairly simple to evaluate. 
