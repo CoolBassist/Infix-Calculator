@@ -29,4 +29,14 @@ public:
     std::string get_literal();
 };
 
+class RealObject{
+private:
+    double value;
+    std::string literal;
+public:
+    RealObject(double, std::string);
+    double get_value();
+    std::string get_literal();
+};
+
 #endif //INFIXCALC_OBJECT_H

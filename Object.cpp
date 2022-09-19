@@ -29,3 +29,16 @@ Type OpObject::get_type() {
 std::string OpObject::get_literal() {
     return literal;
 }
+
+RealObject::RealObject(double value, std::string literal) {
+    this->value = value;
+    this->literal = literal;
+}
+
+double RealObject::get_value() {
+    return value;
+}
+
+std::string RealObject::get_literal() {
+    return literal;
+}
