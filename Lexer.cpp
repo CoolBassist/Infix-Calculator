@@ -65,6 +65,10 @@ std::vector<Token> Lexer::get_tokens() {
                 tokens.push_back(Token(RPAREN, std::string(1, input[position])));
                 position++;
                 break;
+            case '.':
+                tokens.push_back(Token(DOT, std::string(1, input[position])));
+                position++;
+                break;
             default:
                 if(std::isdigit(input[position])){
                     std::string result = read_integer_literal();

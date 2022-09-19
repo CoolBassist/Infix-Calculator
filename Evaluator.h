@@ -13,11 +13,11 @@
 
 class Evaluator {
 private:
-    std::vector<std::variant<IntObject, OpObject>> objects;
-    std::stack<IntObject> output;
+    std::vector<std::variant<IntObject, OpObject, RealObject>> objects;
+    std::stack<std::variant<IntObject, RealObject>> output;
 public:
-    Evaluator(std::vector<std::variant<IntObject, OpObject>>);
-    int get_result();
+    Evaluator(std::vector<std::variant<IntObject, OpObject, RealObject>>);
+    double get_result();
 };
 
 

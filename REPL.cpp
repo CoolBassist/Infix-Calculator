@@ -33,7 +33,7 @@ void REPL::start() {
         if (debug) {
             std::cout << "Number of tokens: " << tokens.size() << "\n";
             std::cout << "Tokens: ";
-            std::string types[]{"INT", "ADD", "SUB", "MUL", "DIV", "EXP", "LPA", "RPA", "NEG", "SIN", "COS", "TAN"};
+            std::string types[]{"INT", "ADD", "SUB", "MUL", "DIV", "EXP", "LPA", "RPA", "NEG", "SIN", "COS", "TAN", "DOT"};
             for (Token t: tokens) {
                 std::cout << "{" << types[t.get_type()] << ", '" << t.get_literal() << "'}, ";
             }
@@ -42,7 +42,7 @@ void REPL::start() {
 
         sy = new ShuntYard(tokens);
 
-        std::vector<std::variant<IntObject, OpObject>> objects;
+        std::vector<std::variant<IntObject, OpObject, RealObject>> objects;
 
         objects = sy->to_infix();
 
@@ -53,11 +53,15 @@ void REPL::start() {
 
         if (debug) {
             std::cout << "Objects: ";
-            for (std::variant<IntObject, OpObject> obj: objects) {
+            for (std::variant<IntObject, OpObject, RealObject> obj: objects) {
                 if(std::holds_alternative<IntObject>(obj)) {
                     std::cout << "{" << std::get<IntObject>(obj).get_literal() << "}, ";
-                }else{
+                }
+                if(std::holds_alternative<OpObject>(obj)){
                     std::cout << "{" << std::get<OpObject>(obj).get_literal() << "}, ";
+                }
+                if(std::holds_alternative<RealObject>(obj)){
+                    std::cout << "{" << std::get<RealObject>(obj).get_literal() << "}, ";
                 }
             }
             std::cout << "\n";
@@ -65,7 +69,7 @@ void REPL::start() {
 
         e = new Evaluator(objects);
 
-        int result = e->get_result();
+        double result = e->get_result();
 
         std::cout << result << "\n";
 
@@ -91,7 +95,7 @@ void REPL::test() {
         Lexer l(test.first);
         std::vector<Token> tokens = l.get_tokens();
         ShuntYard sy(tokens);
-        std::vector<std::variant<IntObject, OpObject>> objects = sy.to_infix();
+        std::vector<std::variant<IntObject, OpObject, RealObject>> objects = sy.to_infix();
         Evaluator e(objects);
         int result = e.get_result();
         if (result != test.second) {
@@ -104,11 +108,15 @@ void REPL::test() {
 
             std::cout << "Objects: ";
 
-            for (std::variant<IntObject, OpObject> obj: objects) {
+            for (std::variant<IntObject, OpObject, RealObject> obj: objects) {
                 if(std::holds_alternative<IntObject>(obj)) {
                     std::cout << "{" << std::get<IntObject>(obj).get_literal() << "}, ";
-                }else{
+                }
+                if(std::holds_alternative<OpObject>(obj)){
                     std::cout << "{" << std::get<OpObject>(obj).get_literal() << "}, ";
+                }
+                if(std::holds_alternative<RealObject>(obj)){
+                    std::cout << "{" << std::get<RealObject>(obj).get_literal() << "}, ";
                 }
             }
             std::cout << "\n";

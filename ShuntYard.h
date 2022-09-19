@@ -16,11 +16,11 @@ class ShuntYard {
 private:
     std::vector<Token> tokens;
     std::stack<OpObject> operators;
-    std::queue<std::variant<IntObject, OpObject>> output;
+    std::queue<std::variant<IntObject, OpObject, RealObject>> output;
     int position;
 public:
     ShuntYard(std::vector<Token>);
-    std::vector<std::variant<IntObject, OpObject>> to_infix();
+    std::vector<std::variant<IntObject, OpObject, RealObject>> to_infix();
 };
 
 

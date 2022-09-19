@@ -11,8 +11,8 @@ ShuntYard::ShuntYard(std::vector<Token> tokens) {
     position = 0;
 }
 
-std::vector<std::variant<IntObject, OpObject>> ShuntYard::to_infix() {
-    std::vector<std::variant<IntObject, OpObject>> objects;
+std::vector<std::variant<IntObject, OpObject, RealObject>> ShuntYard::to_infix() {
+    std::vector<std::variant<IntObject, OpObject, RealObject>> objects;
 
     while (position < tokens.size()) {
         switch (tokens[position].get_type()) {
@@ -21,7 +21,13 @@ std::vector<std::variant<IntObject, OpObject>> ShuntYard::to_infix() {
                 output.push(IntObject(0-std::stoi(tokens[position].get_literal()), "-" + tokens[position].get_literal()));
                 break;
             case INT:
-                output.push(IntObject(std::stoi(tokens[position].get_literal()), tokens[position].get_literal()));
+                if(position == tokens.size()-2 || tokens[position+1].get_type() != DOT) {
+                    output.push(IntObject(std::stoi(tokens[position].get_literal()), tokens[position].get_literal()));
+                }else{
+                    output.push(RealObject(std::stod(tokens[position].get_literal() + "." + tokens[position+2].get_literal()), tokens[position].get_literal() + "." + tokens[position+2].get_literal()));
+                    position++;
+                    position++;
+                }
                 break;
             case ADD:
             case SUB:
