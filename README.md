@@ -2,7 +2,7 @@
 An infix calculator that uses the shunting yard algorithm.
 
 ## General overview
-This calculator uses a REPL approach where the user inputs a single line expression, and then if possible outputs the result on the next line. It goes through several stages before printing the output.
+This calculator uses a REPL approach where the user inputs a single line expression, and then if possible outputs the result on the next line. It goes through several stages before printing the output. The calculator also allows for real numbers to be used.
 1. Lexer
 2. Shuntyard
 3. Evaluation
