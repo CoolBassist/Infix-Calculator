@@ -32,20 +32,29 @@ std::vector<std::variant<IntObject, OpObject, RealObject>> ShuntYard::to_infix()
             case ADD:
             case SUB:
                 while (operators.size() != 0 &&
-                        (operators.top().get_literal() == "*" || operators.top().get_literal() == "/")) {
+                        (operators.top().get_type() == MULT || operators.top().get_type() == DIV || operators.top().get_type() == SIN || operators.top().get_type() == COS || operators.top().get_type() == TAN || operators.top().get_type() == EXP || operators.top().get_type() == LOG)) {
                     OpObject cur_object = operators.top();
                     output.push(cur_object);
                     operators.pop();
                 }
             case MULT:
             case DIV:
-                while(operators.size() != 0 && (operators.top().get_literal() == "^")){
+                while(operators.size() != 0 && (operators.top().get_type() == EXP || operators.top().get_type() == LOG || operators.top().get_type() == SIN || operators.top().get_type() == COS || operators.top().get_type() == TAN)){
                     OpObject cur_object = operators.top();
                     output.push(cur_object);
                     operators.pop();
                 }
             case EXP:
+                while(operators.size() != 0 && (operators.top().get_type() == SIN || operators.top().get_type() == COS || operators.top().get_type() == TAN || operators.top().get_type() == LOG)){
+                    OpObject cur_object = operators.top();
+                    output.push(cur_object);
+                    operators.pop();
+                }
             case LPAREN:
+            case SIN:
+            case COS:
+            case TAN:
+            case LOG:
                 operators.push(OpObject(tokens[position].get_type(), tokens[position].get_literal()));
                 break;
             case RPAREN:

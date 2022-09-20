@@ -8,7 +8,7 @@
 
 #include <string>
 
-enum Type {INT, ADD, SUB, MULT, DIV, EXP, LPAREN, RPAREN, NEG, SIN, COS, TAN, DOT};
+enum Type {INT, ADD, SUB, MULT, DIV, EXP, LPAREN, RPAREN, NEG, SIN, COS, TAN, DOT, LOG};
 
 class Token {
 private:

@@ -127,6 +127,54 @@ double Evaluator::get_result() {
                         output.push(RealObject(std::pow(num1, num2), std::to_string(num1 + num2)));
                     }
                     break;
+
+                case SIN:
+                    num1_int = std::holds_alternative<IntObject>(output.top());
+                    if (num1_int) {
+                        num1 = std::get<IntObject>(output.top()).get_value();
+                    } else {
+                        num1 = std::get<RealObject>(output.top()).get_value();
+                    }
+                    output.pop();
+
+                    output.push(RealObject(std::sin((M_PI/180)*num1), std::to_string(std::sin(M_PI/180)*num1)));
+                    break;
+
+                case COS:
+                    num1_int = std::holds_alternative<IntObject>(output.top());
+                    if (num1_int) {
+                        num1 = std::get<IntObject>(output.top()).get_value();
+                    } else {
+                        num1 = std::get<RealObject>(output.top()).get_value();
+                    }
+                    output.pop();
+
+                    output.push(RealObject(std::cos((M_PI/180)*num1), std::to_string(std::cos(M_PI/180)*num1)));
+                    break;
+
+                case TAN:
+                    num1_int = std::holds_alternative<IntObject>(output.top());
+                    if (num1_int) {
+                        num1 = std::get<IntObject>(output.top()).get_value();
+                    } else {
+                        num1 = std::get<RealObject>(output.top()).get_value();
+                    }
+                    output.pop();
+
+                    output.push(RealObject(std::tan((M_PI/180)*num1), std::to_string(std::tan(M_PI/180)*num1)));
+                    break;
+
+                case LOG:
+                    num1_int = std::holds_alternative<IntObject>(output.top());
+                    if (num1_int) {
+                        num1 = std::get<IntObject>(output.top()).get_value();
+                    } else {
+                        num1 = std::get<RealObject>(output.top()).get_value();
+                    }
+                    output.pop();
+
+                    output.push(RealObject(std::log10(num1), std::to_string(std::log10(num1))));
+                    break;
             }
         }
     }

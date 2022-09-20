@@ -33,7 +33,7 @@ void REPL::start() {
         if (debug) {
             std::cout << "Number of tokens: " << tokens.size() << "\n";
             std::cout << "Tokens: ";
-            std::string types[]{"INT", "ADD", "SUB", "MUL", "DIV", "EXP", "LPA", "RPA", "NEG", "SIN", "COS", "TAN", "DOT"};
+            std::string types[]{"INT", "ADD", "SUB", "MUL", "DIV", "EXP", "LPA", "RPA", "NEG", "SIN", "COS", "TAN", "DOT", "LOG"};
             for (Token t: tokens) {
                 std::cout << "{" << types[t.get_type()] << ", '" << t.get_literal() << "'}, ";
             }

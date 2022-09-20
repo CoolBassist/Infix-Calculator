@@ -88,6 +88,8 @@ std::vector<Token> Lexer::get_tokens() {
                         tokens.push_back(Token(COS, result));
                     }else if(!result.compare("tan")){
                         tokens.push_back(Token(TAN, result));
+                    }else if(!result.compare("log")){
+                        tokens.push_back(Token(LOG, result));
                     }else{
                         std::cout << "Unexpected token " << input[position] << "\n";
                         tokens.clear();
