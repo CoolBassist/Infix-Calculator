@@ -185,5 +185,3 @@ double Evaluator::get_result() {
         return std::get<RealObject>(output.top()).get_value();
     }
 }
-
-
