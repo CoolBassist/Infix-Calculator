@@ -13,6 +13,8 @@ ShuntYard::ShuntYard(std::vector<Token> tokens) {
 
 std::vector<std::variant<IntObject, OpObject, RealObject>> ShuntYard::to_infix() {
     std::vector<std::variant<IntObject, OpObject, RealObject>> objects;
+    std::stack<std::pair<Type, int>> brackets;
+    int open_brackets = 0;
 
     while (position < tokens.size()) {
         switch (tokens[position].get_type()) {
@@ -31,55 +33,85 @@ std::vector<std::variant<IntObject, OpObject, RealObject>> ShuntYard::to_infix()
                 break;
             case ADD:
             case SUB:
-                while (operators.size() != 0 &&
-                        (operators.top().get_type() == MULT || operators.top().get_type() == DIV || operators.top().get_type() == SIN || operators.top().get_type() == COS || operators.top().get_type() == TAN || operators.top().get_type() == EXP || operators.top().get_type() == LOG)) {
-                    OpObject cur_object = operators.top();
-                    output.push(cur_object);
-                    operators.pop();
-                }
             case MULT:
             case DIV:
-                while(operators.size() != 0 && (operators.top().get_type() == EXP || operators.top().get_type() == LOG || operators.top().get_type() == SIN || operators.top().get_type() == COS || operators.top().get_type() == TAN)){
-                    OpObject cur_object = operators.top();
-                    output.push(cur_object);
-                    operators.pop();
-                }
             case EXP:
-                while(operators.size() != 0 && (operators.top().get_type() == SIN || operators.top().get_type() == COS || operators.top().get_type() == TAN || operators.top().get_type() == LOG)){
+                while((!operators.empty()) && (precs[operators.top().get_type()] > precs[tokens.front().get_type()])){
                     OpObject cur_object = operators.top();
                     output.push(cur_object);
                     operators.pop();
                 }
             case LPAREN:
+                if(tokens[position].get_type() == LPAREN){
+                    open_brackets++;
+                    brackets.push(std::pair(tokens[position].get_type(), tokens[position].get_position()));
+                }
             case SIN:
             case COS:
             case TAN:
             case LOG:
+            case SQR:
                 operators.push(OpObject(tokens[position].get_type(), tokens[position].get_literal()));
+                if(!expect_peek(INT) && !expect_peek(LPAREN)){
+                    if(position != tokens.size()-1) {
+                        errors.emplace_back(SYNTAX_ERROR, tokens[position+1].get_literal(),
+                                            tokens[position+1].get_position());
+                    }else{
+                        errors.emplace_back(EXPECTED_TOKEN, "EOL", tokens.size());
+                    }
+                }
                 break;
             case RPAREN:
-                if(operators.size() != 0) {
-                    while (operators.size() != 0 && operators.top().get_literal().compare("(") != 0) {
+                if(brackets.empty()){
+                    errors.emplace_back(MISSING_OPEN_BRACKET, "(", tokens[position].get_position());
+                    break;
+                }else if(brackets.top().first != LPAREN){
+                    errors.emplace_back(MISSING_OPEN_BRACKET, "(", tokens[position].get_position());
+                    brackets.pop();
+                }else{
+                    brackets.pop();
+                }
+
+                if(!operators.empty()) {
+                    while (!operators.empty() && operators.top().get_literal() != "(") {
                         output.push(operators.top());
                         operators.pop();
                     }
                     operators.pop();
                 }
+                open_brackets--;
                 break;
         }
 
         position++;
     }
 
-    while (operators.size() != 0) {
+    while (!operators.empty()) {
         output.push(operators.top());
         operators.pop();
     }
 
-    while (output.size() != 0) {
+    while (!output.empty()) {
         objects.push_back(output.front());
         output.pop();
     }
 
+    while(!brackets.empty()){
+        errors.emplace_back(MISSING_CLOSING_BRACKET, ")", brackets.top().second);
+        brackets.pop();
+    }
+
     return objects;
+}
+
+bool ShuntYard::expect_peek(Type type) {
+    if(position == tokens.size()-1 || tokens[position+1].get_type() == type){
+        return false;
+    }
+
+    return true;
+}
+
+std::vector<Error> ShuntYard::get_errors() {
+    return errors;
 }

@@ -5,17 +5,17 @@
 #include <iostream>
 #include "Lexer.h"
 #include "Token.h"
+#include "Error.h"
 
 Lexer::Lexer(std::string input) {
-    std::string inp = "";
-    for(char c: input){
-        if(c == ' ' || c == '\t' || c == '\n' || c == '\r'){
-            continue;
-        }
-        inp += c;
-    }
-    this->input = inp;
+    this->input = input;
     this->position = 0;
+}
+
+void Lexer::skip_whitespace(){
+    while(input[position] == ' ' || input[position] == '\t' || input[position] == '\n' || input[position] == '\r') {
+        position++;
+    }
 }
 
 std::string Lexer::read_integer_literal() {
@@ -32,73 +32,75 @@ std::vector<Token> Lexer::get_tokens() {
     std::vector<Token> tokens;
 
     while(position < input.size()){
+        skip_whitespace();
         switch (input[position]) {
             case '+':
-                tokens.push_back(Token(ADD, std::string(1, input[position])));
+                tokens.emplace_back(ADD, std::string(1, input[position]), position);
                 position++;
                 break;
             case '-':
-                if(tokens.size() == 0 || (tokens.back().get_type() != RPAREN && !std::isdigit(input[position-1]))){
-                    tokens.push_back(Token(NEG, std::string(1, input[position])));
-                }else {
-                    tokens.push_back(Token(SUB, std::string(1, input[position])));
+                if(tokens.size() == 0){
+                    tokens.emplace_back(NEG, std::string(1, input[position]), position);
+                }else if(tokens.back().get_type() == INT || tokens.back().get_type() == RPAREN){
+                    tokens.emplace_back(SUB, std::string(1, input[position]), position);
+                }else{
+                    tokens.emplace_back(NEG, std::string(1, input[position]), position);
                 }
                 position++;
                 break;
             case '*':
-                tokens.push_back(Token(MULT, std::string(1, input[position])));
+                tokens.emplace_back(MULT, std::string(1, input[position]), position);
                 position++;
                 break;
             case '/':
-                tokens.push_back(Token(DIV, std::string(1, input[position])));
+                tokens.emplace_back(DIV, std::string(1, input[position]), position);
                 position++;
                 break;
             case '^':
-                tokens.push_back(Token(EXP, std::string(1, input[position])));
+                tokens.emplace_back(EXP, std::string(1, input[position]), position);
                 position++;
                 break;
             case '(':
-                tokens.push_back(Token(LPAREN, std::string(1, input[position])));
+                tokens.emplace_back(LPAREN, std::string(1, input[position]), position);
                 position++;
                 break;
             case ')':
-                tokens.push_back(Token(RPAREN, std::string(1, input[position])));
+                tokens.emplace_back(RPAREN, std::string(1, input[position]), position);
                 position++;
                 break;
             case '.':
-                tokens.push_back(Token(DOT, std::string(1, input[position])));
+                tokens.emplace_back(DOT, std::string(1, input[position]), position);
                 position++;
                 break;
             default:
                 if(std::isdigit(input[position])){
                     std::string result = read_integer_literal();
                     if(result.compare("")){
-                        tokens.push_back(Token(INT, result));
+                        tokens.emplace_back(INT, result, position);
                     }else{
-                        std::cout << "Unexpected token " << input[position] << "\n";
-                        tokens.clear();
-                        return tokens;
+                        errors.emplace_back(UNEXPECTED_TOKEN, std::string(1, input[position]), position);
+                        position++;
                     }
                 }else if(std::isalpha(input[position])){
                     std::string result = read_identifier();
 
                     if(!result.compare("sin")){
-                        tokens.push_back(Token(SIN, result));
+                        tokens.emplace_back(SIN, result, position-3);
                     }else if(!result.compare("cos")){
-                        tokens.push_back(Token(COS, result));
+                        tokens.emplace_back(COS, result, position-3);
                     }else if(!result.compare("tan")){
-                        tokens.push_back(Token(TAN, result));
-                    }else if(!result.compare("log")){
-                        tokens.push_back(Token(LOG, result));
+                        tokens.emplace_back(TAN, result, position-3);
+                    }else if(!result.compare("log")) {
+                        tokens.emplace_back(LOG, result, position-3);
+                    }else if(!result.compare("sqrt")){
+                        tokens.emplace_back(SQR, result, position-4);
                     }else{
-                        std::cout << "Unexpected token " << input[position] << "\n";
-                        tokens.clear();
-                        return tokens;
+                        errors.emplace_back(UNKNOWN_IDENTIFIER, result, position-result.size());
+                        position++;
                     }
                 }else{
-                    std::cout << "Unexpected token " << input[position] << "\n";
-                    tokens.clear();
-                    return tokens;
+                    errors.emplace_back(UNEXPECTED_TOKEN, std::string(1, input[position]), position);
+                    position++;
                 }
         }
     }
@@ -113,4 +115,8 @@ std::string Lexer::read_identifier() {
         position++;
     }
     return identifier;
+}
+
+std::vector<Error> Lexer::get_errors() {
+    return errors;
 }

@@ -2,6 +2,7 @@
 // Created by CoolBassist on 05/09/2022.
 //
 #include "Evaluator.h"
+#include "Error.h"
 #include <cmath>
 #include <variant>
 #include <iostream>
@@ -95,6 +96,12 @@ double Evaluator::get_result() {
                     } else {
                         num2 = std::get<RealObject>(output.top()).get_value();
                     }
+
+                    if(num2 == 0){
+                        std::cout << Error(DIV_BY_0, "0", 0).get_error();
+                        return NULL;
+                    }
+
                     output.pop();
                     num1_int = std::holds_alternative<IntObject>(output.top());
                     if (num1_int) {
@@ -174,6 +181,18 @@ double Evaluator::get_result() {
                     output.pop();
 
                     output.push(RealObject(std::log10(num1), std::to_string(std::log10(num1))));
+                    break;
+
+                case SQR:
+                    num1_int = std::holds_alternative<IntObject>(output.top());
+                    if (num1_int) {
+                        num1 = std::get<IntObject>(output.top()).get_value();
+                    } else {
+                        num1 = std::get<RealObject>(output.top()).get_value();
+                    }
+                    output.pop();
+
+                    output.push(RealObject(std::sqrt(num1), std::to_string(std::sqrt(num1))));
                     break;
             }
         }

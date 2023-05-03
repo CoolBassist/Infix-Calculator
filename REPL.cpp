@@ -25,19 +25,28 @@ void REPL::start() {
 
         std::vector<Token> tokens = l->get_tokens();
 
-        if (tokens.size() == 0) {
-            std::cout << "Error at tokenising stage.\n\n";
+        std::vector<Error> errors = l->get_errors();
+
+        if(!errors.empty()){
+            for(Error e: errors){
+                std::cout << input << "\n";
+                for(int i = 0; i < e.get_position(); i++){
+                    std::cout << "-";
+                }
+                std::cout << "^\n";
+                std::cout << e.get_error() << "\n";
+            }
             continue;
         }
 
         if (debug) {
             std::cout << "Number of tokens: " << tokens.size() << "\n";
             std::cout << "Tokens: ";
-            std::string types[]{"INT", "ADD", "SUB", "MUL", "DIV", "EXP", "LPA", "RPA", "NEG", "SIN", "COS", "TAN", "DOT", "LOG"};
+            std::string types[]{"INT", "ADD", "SUB", "MUL", "DIV", "EXP", "LPA", "RPA", "NEG", "SIN", "COS", "TAN", "DOT", "LOG", "SQR"};
             for (Token t: tokens) {
                 std::cout << "{" << types[t.get_type()] << ", '" << t.get_literal() << "'}, ";
             }
-            std::cout << "\n";
+            std::cout << std::endl;
         }
 
         sy = new ShuntYard(tokens);
@@ -46,8 +55,23 @@ void REPL::start() {
 
         objects = sy->to_infix();
 
+        errors = sy->get_errors();
+
+        if(!errors.empty()){
+            for(Error e: errors){
+                std::cout << input << "\n";
+                for(int i = 0; i < e.get_position(); i++){
+                    std::cout << "-";
+                }
+                std::cout << "^\n";
+                std::cout << e.get_error() << "\n";
+            }
+            continue;
+        }
+
         if (objects.size() == 0) {
-            std::cout << "Error at the shunt yard.\n\n";
+            Error e(NO_EXPRESSION, "", 0);
+            std::cout << e.get_error();
             continue;
         }
 

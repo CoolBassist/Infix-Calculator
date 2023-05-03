@@ -8,10 +8,12 @@
 
 #include <vector>
 #include "Token.h"
+#include "Error.h"
 
 class Lexer {
 private:
     int position;
+    std::vector<Error> errors;
     std::string input;
     void skip_whitespace();
     std::string read_integer_literal();
@@ -19,6 +21,7 @@ private:
 public:
     Lexer(std::string);
     std::vector<Token> get_tokens();
+    std::vector<Error> get_errors();
 };
 
 
