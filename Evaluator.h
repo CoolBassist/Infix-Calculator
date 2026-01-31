@@ -12,9 +12,6 @@
 #include "Object.h"
 #include <tuple>
 
-typedef std::variant<IntObject, OpObject, RealObject> Object ;
-typedef std::variant<IntObject, RealObject> NumberObject ;
-
 class Evaluator {
 private:
     std::vector<Object> objects;

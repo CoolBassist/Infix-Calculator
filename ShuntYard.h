@@ -20,14 +20,14 @@ class ShuntYard {
 private:
     std::vector<Token> tokens;
     std::stack<OpObject> operators;
-    std::queue<std::variant<IntObject, OpObject, RealObject>> output;
+    std::queue<Object> output;
     std::vector<Error> errors;
     std::unordered_map<Type, prec> precs {{ADD, SUM}, {SUB, SUM}, {MULT, PRODUCT}, {DIV, PRODUCT}, {SIN, FUNC}, {COS, FUNC}, {TAN, FUNC}, {LOG, FUNC}, {SQR, FUNC}, {EXP, EXPR}};
 
     int position;
 public:
     ShuntYard(std::vector<Token>);
-    std::vector<std::variant<IntObject, OpObject, RealObject>> to_infix();
+    std::vector<Object> to_infix();
     std::vector<Error> get_errors();
     bool expect_peek(Type);
 };

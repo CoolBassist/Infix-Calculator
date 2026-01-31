@@ -5,6 +5,7 @@
 #include <iostream>
 #include <variant>
 #include "ShuntYard.h"
+#include "Object.h"
 #include <spdlog/spdlog.h>
 
 ShuntYard::ShuntYard(std::vector<Token> tokens) {
@@ -12,8 +13,8 @@ ShuntYard::ShuntYard(std::vector<Token> tokens) {
     position = 0;
 }
 
-std::vector<std::variant<IntObject, OpObject, RealObject>> ShuntYard::to_infix() {
-    std::vector<std::variant<IntObject, OpObject, RealObject>> objects;
+std::vector<Object> ShuntYard::to_infix() {
+    std::vector<Object> objects;
     std::stack<std::pair<Type, int>> brackets;
     int open_brackets = 0;
 

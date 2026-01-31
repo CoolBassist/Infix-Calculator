@@ -5,8 +5,8 @@
 #ifndef INFIXCALC_OBJECT_H
 #define INFIXCALC_OBJECT_H
 
-
 #include <string>
+#include <variant>
 #include "Token.h"
 
 class IntObject {
@@ -38,5 +38,8 @@ public:
     double get_value();
     std::string get_literal();
 };
+
+typedef std::variant<IntObject, OpObject, RealObject> Object ;
+typedef std::variant<IntObject, RealObject> NumberObject ;
 
 #endif //INFIXCALC_OBJECT_H
