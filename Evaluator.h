@@ -10,13 +10,19 @@
 #include <stack>
 #include <variant>
 #include "Object.h"
+#include <tuple>
+
+typedef std::variant<IntObject, OpObject, RealObject> Object ;
+typedef std::variant<IntObject, RealObject> NumberObject ;
 
 class Evaluator {
 private:
-    std::vector<std::variant<IntObject, OpObject, RealObject>> objects;
-    std::stack<std::variant<IntObject, RealObject>> output;
+    std::vector<Object> objects;
+    std::stack<NumberObject> output;
+    std::tuple<double, double, bool> get_numbers();
+    std::tuple<double, bool> get_single_number();
 public:
-    Evaluator(std::vector<std::variant<IntObject, OpObject, RealObject>>);
+    Evaluator(std::vector<Object>);
     double get_result();
 };
 

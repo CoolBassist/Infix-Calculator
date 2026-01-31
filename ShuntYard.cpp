@@ -5,6 +5,7 @@
 #include <iostream>
 #include <variant>
 #include "ShuntYard.h"
+#include <spdlog/spdlog.h>
 
 ShuntYard::ShuntYard(std::vector<Token> tokens) {
     this->tokens = tokens;
@@ -17,13 +18,14 @@ std::vector<std::variant<IntObject, OpObject, RealObject>> ShuntYard::to_infix()
     int open_brackets = 0;
 
     while (position < tokens.size()) {
+        spdlog::info("Processing token: {} at position {}", tokens[position].get_literal(), tokens[position].get_position());
         switch (tokens[position].get_type()) {
             case NEG:
                 position++;
                 output.push(IntObject(0-std::stoi(tokens[position].get_literal()), "-" + tokens[position].get_literal()));
                 break;
             case INT:
-                if(position == tokens.size()-2 || tokens[position+1].get_type() != DOT) {
+                if(position == tokens.size()-1 || tokens[position+1].get_type() != DOT) {
                     output.push(IntObject(std::stoi(tokens[position].get_literal()), tokens[position].get_literal()));
                 }else{
                     output.push(RealObject(std::stod(tokens[position].get_literal() + "." + tokens[position+2].get_literal()), tokens[position].get_literal() + "." + tokens[position+2].get_literal()));
@@ -103,6 +105,8 @@ std::vector<std::variant<IntObject, OpObject, RealObject>> ShuntYard::to_infix()
 
     return objects;
 }
+
+
 
 bool ShuntYard::expect_peek(Type type) {
     if(position == tokens.size()-1 || tokens[position+1].get_type() == type){

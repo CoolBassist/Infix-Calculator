@@ -1,0 +1,21 @@
+# ninja log v6
+3	34	7915610596306677	spdlog-populate-prefix/src/spdlog-populate-stamp/spdlog-populate-mkdir	9c3b499b2908be4c
+3	34	7915610596306677	C:/Users/errey/programming/Infix-Calculator/build/_deps/spdlog-subbuild/spdlog-populate-prefix/src/spdlog-populate-stamp/spdlog-populate-mkdir	9c3b499b2908be4c
+34	2515	7915610621118026	spdlog-populate-prefix/src/spdlog-populate-stamp/spdlog-populate-download	997e658bf3278ea4
+34	2515	7915610621118026	C:/Users/errey/programming/Infix-Calculator/build/_deps/spdlog-subbuild/spdlog-populate-prefix/src/spdlog-populate-stamp/spdlog-populate-download	997e658bf3278ea4
+2515	2596	7915610621148074	spdlog-populate-prefix/src/spdlog-populate-stamp/spdlog-populate-update	6eaf37a665bd9fc4
+2515	2596	7915610621148074	C:/Users/errey/programming/Infix-Calculator/build/_deps/spdlog-subbuild/spdlog-populate-prefix/src/spdlog-populate-stamp/spdlog-populate-update	6eaf37a665bd9fc4
+2596	2632	7915610622282652	spdlog-populate-prefix/src/spdlog-populate-stamp/spdlog-populate-patch	97fc7ac4938af124
+2596	2632	7915610622282652	C:/Users/errey/programming/Infix-Calculator/build/_deps/spdlog-subbuild/spdlog-populate-prefix/src/spdlog-populate-stamp/spdlog-populate-patch	97fc7ac4938af124
+2632	2663	7915610622593041	spdlog-populate-prefix/src/spdlog-populate-stamp/spdlog-populate-configure	e06cf51bdfa994c8
+2632	2663	7915610622593041	C:/Users/errey/programming/Infix-Calculator/build/_deps/spdlog-subbuild/spdlog-populate-prefix/src/spdlog-populate-stamp/spdlog-populate-configure	e06cf51bdfa994c8
+2663	2693	7915610622894745	spdlog-populate-prefix/src/spdlog-populate-stamp/spdlog-populate-build	e9e2274058785ce7
+2663	2693	7915610622894745	C:/Users/errey/programming/Infix-Calculator/build/_deps/spdlog-subbuild/spdlog-populate-prefix/src/spdlog-populate-stamp/spdlog-populate-build	e9e2274058785ce7
+2693	2726	7915610623225204	spdlog-populate-prefix/src/spdlog-populate-stamp/spdlog-populate-install	e5a8e47d93522b85
+2693	2726	7915610623225204	C:/Users/errey/programming/Infix-Calculator/build/_deps/spdlog-subbuild/spdlog-populate-prefix/src/spdlog-populate-stamp/spdlog-populate-install	e5a8e47d93522b85
+2726	2756	7915610623531876	spdlog-populate-prefix/src/spdlog-populate-stamp/spdlog-populate-test	9a43f84e6c12e2a8
+2726	2756	7915610623531876	C:/Users/errey/programming/Infix-Calculator/build/_deps/spdlog-subbuild/spdlog-populate-prefix/src/spdlog-populate-stamp/spdlog-populate-test	9a43f84e6c12e2a8
+2756	2798	7915610623947639	CMakeFiles/spdlog-populate-complete	41cc15d383560a7e
+2756	2798	7915610623947639	spdlog-populate-prefix/src/spdlog-populate-stamp/spdlog-populate-done	41cc15d383560a7e
+2756	2798	7915610623947639	C:/Users/errey/programming/Infix-Calculator/build/_deps/spdlog-subbuild/CMakeFiles/spdlog-populate-complete	41cc15d383560a7e
+2756	2798	7915610623947639	C:/Users/errey/programming/Infix-Calculator/build/_deps/spdlog-subbuild/spdlog-populate-prefix/src/spdlog-populate-stamp/spdlog-populate-done	41cc15d383560a7e

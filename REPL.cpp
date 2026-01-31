@@ -5,6 +5,7 @@
 #include <iostream>
 #include <map>
 #include "REPL.h"
+#include <spdlog/spdlog.h>
 
 void REPL::start() {
     while (true) {
@@ -24,6 +25,8 @@ void REPL::start() {
         l = new Lexer(input);
 
         std::vector<Token> tokens = l->get_tokens();
+
+        spdlog::info("Tokens generated: {}", tokens.size());
 
         std::vector<Error> errors = l->get_errors();
 
